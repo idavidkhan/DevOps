@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------- 
-  1. Global Reset & Theme Variables
-------------------------------------------------------------------*/
+        1. Global Reset & Theme Variables
+      ------------------------------------------------------------------*/
 :root {
   /* Light Mode Palette */
   --bg-primary-light: #f4f7f9;
@@ -23,8 +23,10 @@
   /* Universal Properties */
   --transition-speed: 0.3s;
   --border-radius: 8px;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
   --shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --hover-shadow-light: 0 8px 16px rgba(0, 0, 0, 0.2);
+  --hover-shadow-dark: 0 8px 16px rgba(0, 0, 0, 0.6);
 }
 
 * {
@@ -40,7 +42,7 @@ body {
 }
 
 body {
-  font-family: "Open Sans", sans-serif; /* Professional body font */
+  font-family: "Open Sans", sans-serif;
   display: flex;
   flex-direction: column;
   background-color: var(--bg-primary-light);
@@ -54,9 +56,66 @@ body.dark-mode {
   color: var(--text-primary-dark);
 }
 
+/* --- Keyframe Animations for Smoothness --- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /*---------------------------------------------------------------- 
-  2. Loader
-------------------------------------------------------------------*/
+        2. AOS: ANIAMTE ON SCROLL
+      ------------------------------------------------------------------*/
+[data-aos] {
+  opacity: 0;
+  transition: opacity 0.5s ease-out, transform 0.6s ease-out;
+}
+
+/* Reset default introduction animation as we are replacing it with AOS for consistency */
+.introduction .profile-photo,
+.introduction .name,
+.introduction .profession,
+.introduction .description {
+  animation: none;
+}
+
+/* AOS states (initial state, hidden) */
+[data-aos="fade-up"] {
+  transform: translateY(20px);
+}
+[data-aos="fade-down"] {
+  transform: translateY(-20px);
+}
+[data-aos="fade-left"] {
+  transform: translateX(20px);
+}
+[data-aos="fade-right"] {
+  transform: translateX(-20px);
+}
+[data-aos="zoom-in"] {
+  transform: scale(0.9);
+}
+[data-aos="fade-in"] {
+  transform: none; /* No movement, just fade */
+}
+
+/* AOS state (final state, visible) */
+.aos-animate {
+  opacity: 1;
+  transform: none;
+}
+
+/* Delay modifiers from HTML (applied via JS) */
+/* .aos-delay-50, .aos-delay-100, etc. will be applied by JS */
+
+/*---------------------------------------------------------------- 
+        3. Loader
+      ------------------------------------------------------------------*/
 .loader {
   position: fixed;
   top: 0;
@@ -107,8 +166,8 @@ body.dark-mode {
 }
 
 /*---------------------------------------------------------------- 
-  3. Header & Navigation
-------------------------------------------------------------------*/
+        4. Header & Navigation (Updated to Liquid Glass + Glassmorphism)
+      ------------------------------------------------------------------*/
 .header {
   position: fixed;
   top: 0;
@@ -125,20 +184,36 @@ body.dark-mode {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0.75rem 1.5rem;
-  background-color: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: var(--border-radius);
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-light);
-  transition: background-color var(--transition-speed),
-    border var(--transition-speed);
+
+  /* Liquid Glass + Glassmorphism effect */
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0.05)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  backdrop-filter: blur(4px) saturate(160%);
+  -webkit-backdrop-filter: blur(4px) saturate(160%);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.1);
+  transition: all 0.4s ease;
 }
 
+/* Dark Mode Support */
 body.dark-mode .header-box {
-  background-color: rgba(30, 30, 30, 0.7);
-  border: 1px solid var(--border-dark);
-  box-shadow: var(--shadow-dark);
+  background: linear-gradient(
+    135deg,
+    rgba(20, 20, 20, 0.35),
+    rgba(20, 20, 20, 0.15)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px) saturate(160%);
+  -webkit-backdrop-filter: blur(4px) saturate(160%);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.02);
 }
 
 .header-name {
@@ -161,7 +236,7 @@ body.dark-mode .header-box {
   border-radius: 50px;
   font-weight: 600;
   font-size: 0.9rem;
-  transition: background-color var(--transition-speed), transform 0.2s ease;
+  transition: background-color var(--transition-speed), transform 0.3s ease;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -174,11 +249,13 @@ body.dark-mode .header-cv {
 
 .header-cv:hover {
   background-color: var(--accent-secondary-light);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-light);
 }
 
 body.dark-mode .header-cv:hover {
   background-color: var(--accent-secondary-dark);
+  box-shadow: var(--shadow-dark);
 }
 
 .download-icon {
@@ -200,15 +277,19 @@ body.dark-mode .mode-toggle {
   color: var(--text-primary-dark);
 }
 .mode-toggle i {
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, color var(--transition-speed);
 }
 .mode-toggle:hover i {
-  transform: scale(1.1);
+  transform: scale(1.2) rotate(15deg);
+  color: var(--accent-primary-light);
+}
+body.dark-mode .mode-toggle:hover i {
+  color: var(--accent-primary-dark);
 }
 
 /*---------------------------------------------------------------- 
-  4. Main Content & Sections
-------------------------------------------------------------------*/
+        5. Main Content & Sections
+      ------------------------------------------------------------------*/
 .main {
   flex: 1;
   padding: 10rem 2rem 5rem 2rem;
@@ -228,9 +309,10 @@ section {
 
 section h3 {
   font-family: "Montserrat", sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   margin-bottom: 2rem;
   color: var(--text-primary-light);
+  /* Removed old transition properties for H3 and applied data-aos in HTML */
 }
 body.dark-mode section h3 {
   color: var(--text-primary-dark);
@@ -245,25 +327,36 @@ body.dark-mode section h3 {
   border: 5px solid var(--bg-secondary-light);
   box-shadow: var(--shadow-light);
   margin-bottom: 2rem;
-  transition: border-color var(--transition-speed);
+  transition: border-color var(--transition-speed),
+    box-shadow var(--transition-speed), transform 0.5s ease;
+  /* Removed fadeInUp animation */
 }
 body.dark-mode .introduction .profile-photo {
   border-color: var(--bg-secondary-dark);
   box-shadow: var(--shadow-dark);
 }
+.introduction .profile-photo:hover {
+  transform: scale(1.05) rotate(3deg);
+  box-shadow: var(--hover-shadow-light);
+}
+body.dark-mode .introduction .profile-photo:hover {
+  box-shadow: var(--hover-shadow-dark);
+}
 .introduction .name {
   font-family: "Montserrat", sans-serif;
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
+  /* Removed fadeInUp animation */
 }
 .introduction .profession {
   font-family: "Montserrat", sans-serif;
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: 500;
   color: var(--accent-primary-light);
   margin-bottom: 1.5rem;
   transition: color var(--transition-speed);
+  /* Removed fadeInUp animation */
 }
 body.dark-mode .introduction .profession {
   color: var(--accent-primary-dark);
@@ -275,6 +368,7 @@ body.dark-mode .introduction .profession {
   max-width: 700px;
   margin: 0 auto;
   transition: color var(--transition-speed);
+  /* Removed fadeInUp animation */
 }
 body.dark-mode .introduction .description {
   color: var(--text-secondary-dark);
@@ -296,11 +390,14 @@ body.dark-mode .introduction .description {
   border-radius: 50px;
   font-size: 0.9rem;
   font-weight: 600;
-  transition: all var(--transition-speed) ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .skill:hover {
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
-  transform: translateY(-2px);
+  box-shadow: var(--hover-shadow-light);
+  transform: translateY(-4px) scale(1.02);
+}
+body.dark-mode .skill:hover {
+  box-shadow: var(--hover-shadow-dark);
 }
 .major-skill {
   background-color: var(--accent-primary-light);
@@ -313,16 +410,18 @@ body.dark-mode .major-skill {
 .minor-skill {
   border: 2px solid var(--border-light);
   color: var(--text-secondary-light);
+  background-color: var(--bg-secondary-light);
   transition: all var(--transition-speed);
 }
 body.dark-mode .minor-skill {
   border-color: var(--border-dark);
   color: var(--text-secondary-dark);
+  background-color: var(--bg-secondary-dark);
 }
 .minor-skills-wrapper {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.7s ease-in-out;
+  transition: max-height 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   margin-top: 2rem;
 }
 .minor-skills-wrapper.expanded {
@@ -330,14 +429,20 @@ body.dark-mode .minor-skill {
 }
 .show-more-btn-container {
   margin-top: 2rem;
+  transition: margin-top 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Added margin transition */
 }
+/* Fix for "Show Less" move */
+.show-more-btn-container.contracting {
+  transition: margin-top 0.15s ease-out; /* Faster move when contracting (Show More -> Show Less) */
+}
+
 .show-more-btn {
   background: none;
   border: none;
   color: var(--text-secondary-light);
   text-decoration: underline;
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   font-weight: 600;
   transition: color var(--transition-speed);
 }
@@ -346,6 +451,7 @@ body.dark-mode .show-more-btn {
 }
 .show-more-btn:hover {
   color: var(--accent-primary-light);
+  transform: scale(1.05);
 }
 body.dark-mode .show-more-btn:hover {
   color: var(--accent-primary-dark);
@@ -354,30 +460,108 @@ body.dark-mode .show-more-btn:hover {
 /* Contact */
 .contact .mail {
   display: inline-block;
-  padding: 0.75rem 1rem;
+  padding: 0.8rem 1.2rem;
   background-color: var(--accent-primary-light);
   color: #fff;
-  border-radius: var(--border-radius);
+  border-radius: 50px;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 1.1rem;
   text-align: center;
-  transition: transform 0.2s ease, background-color var(--transition-speed);
+  transition: transform 0.3s ease, background-color var(--transition-speed),
+    box-shadow 0.3s ease;
 }
 body.dark-mode .mail {
   background-color: var(--accent-primary-dark);
   color: var(--bg-primary-dark);
 }
 .contact .mail:hover {
-  transform: translateY(-3px);
+  transform: translateY(-5px) scale(1.02);
   background-color: var(--accent-secondary-light);
+  box-shadow: var(--shadow-light);
 }
 body.dark-mode .mail:hover {
   background-color: var(--accent-secondary-dark);
+  box-shadow: var(--shadow-dark);
+}
+
+/* Projects Showcase */
+.projects-showcase {
+  padding-top: 2rem;
+}
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+.project-card {
+  display: block;
+  text-decoration: none;
+  background: var(--bg-secondary-light);
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  text-align: left;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: var(--shadow-light);
+  cursor: pointer; /* Added cursor pointer */
+}
+body.dark-mode .project-card {
+  background: var(--bg-secondary-dark);
+  border-color: var(--border-dark);
+  box-shadow: var(--shadow-dark);
+}
+.project-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: var(--hover-shadow-light);
+}
+body.dark-mode .project-card:hover {
+  box-shadow: var(--hover-shadow-dark);
+}
+.project-img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.project-card:hover .project-img {
+  transform: scale(1.05);
+}
+.project-title {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 1rem 1rem 0.5rem 1rem;
+  color: var(--text-primary-light);
+  transition: color var(--transition-speed);
+}
+body.dark-mode .project-title {
+  color: var(--text-primary-dark);
+}
+.project-tag {
+  font-size: 0.8rem;
+  color: var(--accent-primary-light);
+  padding: 0 1rem 1rem 1rem;
+  transition: color var(--transition-speed);
+}
+body.dark-mode .project-tag {
+  color: var(--accent-primary-dark);
+}
+.projects-showcase .show-more-btn {
+  margin-top: 2rem;
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-light);
+  border-radius: 50px;
+  text-decoration: none;
+}
+body.dark-mode .projects-showcase .show-more-btn {
+  border-color: var(--border-dark);
 }
 
 /* Stats */
 .stats-section {
-  width: 80%;
+  width: 90%;
 }
 .stats-grid {
   display: grid;
@@ -389,19 +573,22 @@ body.dark-mode .mail:hover {
   padding: 1.5rem;
   border-radius: var(--border-radius);
   border: 1px solid var(--border-light);
-  transition: all var(--transition-speed);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .stat-box:hover {
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
-  transform: translateY(-2px);
+  box-shadow: var(--hover-shadow-light);
+  transform: translateY(-5px);
 }
 body.dark-mode .stat-box {
   background: var(--bg-secondary-dark);
   border-color: var(--border-dark);
 }
+body.dark-mode .stat-box:hover {
+  box-shadow: var(--hover-shadow-dark);
+}
 .stat-number {
   font-family: "Montserrat", sans-serif;
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 700;
   color: var(--accent-primary-light);
   margin-bottom: 0.5rem;
@@ -411,7 +598,7 @@ body.dark-mode .stat-number {
   color: var(--accent-primary-dark);
 }
 .stat-label {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: var(--text-secondary-light);
   transition: color var(--transition-speed);
 }
@@ -419,43 +606,36 @@ body.dark-mode .stat-label {
   color: var(--text-secondary-dark);
 }
 
-/* Worked With & Social */
-.worked-with,
-.social-media {
+/* Worked With */
+.worked-with {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 2.5rem;
 }
-.worked-with a img,
-.social-media a img {
-  width: 60px;
-  height: 60px;
+.worked-with a img {
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   object-fit: cover;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 2px solid var(--border-light);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  border: 3px solid var(--border-light);
 }
-body.dark-mode .worked-with a img,
-body.dark-mode .social-media a img {
+body.dark-mode .worked-with a img {
   border-color: var(--border-dark);
 }
-.worked-with a:hover img,
-.social-media a:hover img {
-  transform: scale(1.07);
-  box-shadow: var(--shadow-light);
+.worked-with a:hover img {
+  transform: scale(1.15) rotate(5deg);
+  box-shadow: var(--hover-shadow-light);
 }
-body.dark-mode .worked-with a:hover img,
-body.dark-mode .social-media a:hover img {
-  box-shadow: var(--shadow-dark);
+body.dark-mode .worked-with a:hover img {
+  box-shadow: var(--hover-shadow-dark);
 }
 
-/*---------------------------------------------------------------- 
-  5. Testimonials & Carousel
-------------------------------------------------------------------*/
+/* Testimonials & Carousel */
 .carousel {
   position: relative;
-  max-width: 700px;
+  max-width: 750px;
   margin: 0 auto;
 }
 .slider-wrapper {
@@ -468,24 +648,29 @@ body.dark-mode .social-media a:hover img {
 }
 .slide {
   min-width: 100%;
-  padding: 2.5rem;
+  padding: 3rem;
   background-color: var(--bg-secondary-light);
   border: 1px solid var(--border-light);
   cursor: pointer;
-  transition: all var(--transition-speed);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .slide:hover {
   transform: scale(1.02);
+  box-shadow: var(--shadow-light);
 }
 body.dark-mode .slide {
   background-color: var(--bg-secondary-dark);
   border-color: var(--border-dark);
 }
+body.dark-mode .slide:hover {
+  box-shadow: var(--shadow-dark);
+}
 .slide .quote {
   font-style: italic;
+  font-size: 1.05rem;
   color: var(--text-secondary-light);
-  margin-bottom: 1rem;
-  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
 }
 body.dark-mode .slide .quote {
   color: var(--text-secondary-dark);
@@ -493,7 +678,7 @@ body.dark-mode .slide .quote {
 .slide .author {
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: var(--accent-primary-light);
   transition: color var(--transition-speed);
 }
@@ -501,7 +686,7 @@ body.dark-mode .slide .author {
   color: var(--accent-primary-dark);
 }
 .slide .title {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--text-secondary-light);
   transition: color var(--transition-speed);
 }
@@ -516,9 +701,9 @@ body.dark-mode .slide .title {
   color: var(--text-primary-light);
   border: 1px solid var(--border-light);
   border-radius: 50%;
-  width: 45px;
-  height: 45px;
-  font-size: 1.8rem;
+  width: 50px;
+  height: 50px;
+  font-size: 2rem;
   cursor: pointer;
   transition: all 0.3s ease;
   z-index: 10;
@@ -535,8 +720,9 @@ body.dark-mode .carousel-btn {
 }
 .carousel-btn:hover {
   background-color: var(--accent-primary-light);
-  color: var(--bg-primary-dark);
+  color: #fff;
   border-color: var(--accent-primary-light);
+  transform: translateY(-50%) scale(1.1);
 }
 body.dark-mode .carousel-btn:hover {
   background-color: var(--accent-primary-dark);
@@ -550,9 +736,7 @@ body.dark-mode .carousel-btn:hover {
   right: -25px;
 }
 
-/*---------------------------------------------------------------- 
-  6. Modal
-------------------------------------------------------------------*/
+/* Modal (Base Styles) */
 .modal {
   display: none;
   position: fixed;
@@ -561,23 +745,42 @@ body.dark-mode .carousel-btn:hover {
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow-y: auto; /* Allow scrolling for small screens */
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
-  animation: fadeIn 0.3s ease;
+  /* Use JS to control opacity for fade in/out */
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
 }
+.modal.show {
+  opacity: 1;
+  display: block; /* Ensure it's visible when 'show' class is applied */
+}
+/* Modal Content (Centering and Animation) */
 .modal-content {
   background-color: var(--bg-secondary-light);
-  margin: 15% auto;
+  /* Remove old margin: 15% auto; */
   padding: 30px;
   border: 1px solid var(--border-light);
   width: 90%;
   max-width: 600px;
   border-radius: var(--border-radius);
-  animation: slideIn 0.4s ease;
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8); /* Center and scale down initially */
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Apply transition to smooth out the scale */
 }
+/* Active/Opening Animation State */
+.modal.show .modal-content {
+  transform: translate(-50%, -50%) scale(1); /* Zoom in on open */
+}
+/* Closing Animation State (Applied by JS before setting display: none) */
+.modal-content.closing {
+  transform: translate(-50%, -50%) scale(0.8); /* Zoom out on close */
+}
+
 body.dark-mode .modal-content {
   background-color: var(--bg-secondary-dark);
   border-color: var(--border-dark);
@@ -627,32 +830,139 @@ body.dark-mode #modal-author-info {
   background-color: #c9302c;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* Project Modal Specific Styles */
+.project-modal-content #project-modal-description {
+  color: var(--text-secondary-light);
+  margin-bottom: 1.5rem;
+  text-align: left;
+  line-height: 1.6;
 }
-@keyframes slideIn {
-  from {
-    transform: translateY(-30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+body.dark-mode .project-modal-content #project-modal-description {
+  color: var(--text-secondary-dark);
+}
+.project-tags-modal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-light);
+}
+body.dark-mode .project-tags-modal {
+  border-bottom: 1px solid var(--border-dark);
+}
+.project-tags-modal .skill {
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  background-color: var(--accent-primary-light);
+  color: #fff;
+  border-radius: 20px;
+}
+body.dark-mode .project-tags-modal .skill {
+  background-color: var(--accent-primary-dark);
+  color: var(--bg-primary-dark);
+}
+
+.project-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+.action-btn {
+  padding: 0.7rem 1.2rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+.action-btn:hover {
+  transform: translateY(-2px);
+}
+.live-demo-btn {
+  background-color: #28a745; /* Success Green */
+  color: white;
+}
+.live-demo-btn:hover {
+  background-color: #1e7e34;
+}
+.github-btn {
+  background-color: #333; /* GitHub Dark */
+  color: white;
+}
+.github-btn:hover {
+  background-color: #000;
+}
+
+/* Reusing modal close button style, but targeting the new one */
+#project-modal-close-btn {
+  display: block;
+  margin: 0 auto;
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+#project-modal-close-btn:hover {
+  background-color: #c9302c;
+}
+
+/* Removed old keyframes (fadeIn, slideIn) as they are replaced by CSS transition and JS class toggling */
+
+/* Social */
+.social-media {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+}
+.social-icon-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  font-size: 1.8rem;
+  color: var(--text-primary-light);
+  background-color: var(--bg-secondary-light);
+  border: 2px solid var(--border-light);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: var(--shadow-light);
+  text-decoration: none;
+}
+body.dark-mode .social-icon-link {
+  color: var(--text-primary-dark);
+  background-color: var(--bg-secondary-dark);
+  border-color: var(--border-dark);
+  box-shadow: var(--shadow-dark);
+}
+.social-icon-link:hover {
+  transform: translateY(-5px) scale(1.1);
+  color: #fff;
+  background-color: var(--accent-primary-light);
+  border-color: var(--accent-primary-light);
+  box-shadow: var(--hover-shadow-light);
+}
+body.dark-mode .social-icon-link:hover {
+  background-color: var(--accent-primary-dark);
+  border-color: var(--accent-primary-dark);
+  box-shadow: var(--hover-shadow-dark);
+  color: var(--bg-primary-dark);
 }
 
 /*---------------------------------------------------------------- 
-  7. Footer
-------------------------------------------------------------------*/
+        7. Footer
+      ------------------------------------------------------------------*/
 .site-footer {
   background-color: var(--bg-secondary-light);
   color: var(--text-secondary-light);
-  padding: 2.5rem;
+  padding: 2.5rem 1.5rem;
   text-align: center;
   border-top: 1px solid var(--border-light);
   width: 100%;
@@ -671,6 +981,7 @@ body.dark-mode .site-footer {
   color: var(--accent-primary-light);
   text-decoration: none;
   transition: color var(--transition-speed);
+  font-weight: 700;
 }
 body.dark-mode .developer-name a {
   color: var(--accent-primary-dark);
@@ -680,8 +991,8 @@ body.dark-mode .developer-name a {
 }
 
 /*---------------------------------------------------------------- 
-  8. Media Queries for Responsiveness
-------------------------------------------------------------------*/
+        8. Media Queries for Responsiveness
+      ------------------------------------------------------------------*/
 @media (max-width: 1024px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -696,14 +1007,15 @@ body.dark-mode .developer-name a {
     padding: 0.75rem 1rem;
   }
   .introduction .name {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
   }
   .introduction .profession {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
   }
   .carousel-btn {
     width: 40px;
     height: 40px;
+    font-size: 1.5rem;
   }
   .carousel-btn.prev {
     left: -15px;
@@ -711,8 +1023,30 @@ body.dark-mode .developer-name a {
   .carousel-btn.next {
     right: -15px;
   }
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+  /* Center modal on smaller screens */
+  .modal-content {
+    margin: 10% auto; /* Restore top margin to keep it slightly off the top edge on small screens for better UX */
+    position: relative; /* Override absolute positioning for margin-based centering on small screens */
+    top: auto;
+    left: auto;
+    transform: none; /* Reset transform for margin centering */
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  /* Restore animation for small screens */
+  .modal.show .modal-content {
+    transform: scale(1);
+  }
+  .modal-content.closing {
+    transform: scale(0.8);
+  }
 }
 @media (max-width: 550px) {
+  .stats-section {
+    width: 100%;
+  }
   .stats-grid {
     grid-template-columns: 1fr;
   }
@@ -742,11 +1076,15 @@ body.dark-mode .developer-name a {
   }
   .worked-with,
   .social-media {
-    gap: 1rem;
+    gap: 1.5rem;
   }
-  .worked-with a img,
-  .social-media a img {
-    height: 50px;
-    width: 50px;
+  .social-icon-link {
+    height: 55px;
+    width: 55px;
+    font-size: 1.5rem;
+  }
+  .worked-with a img {
+    height: 60px;
+    width: 60px;
   }
 }
