@@ -8,7 +8,7 @@ export const PROFILE: Profile = {
     "Cloud Infrastructure Automation · CI/CD Pipelines · Infrastructure as Code",
   location: "Islamabad, Pakistan",
   email: "idavidkhann@gmail.com",
-  phone: "+92 323 910 4312",
+  phone: "+92 3339420583",
   status: "open-to-work",
 
   summary:
