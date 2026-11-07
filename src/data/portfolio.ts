@@ -109,7 +109,7 @@ export const PROFILE: Profile = {
   education: [
     {
       degree: "Bachelor of Science in Computer Science",
-      school: "University of Swabi, KP · GPA 3.34/4.0 · 2022 - 2026",
+      school: "University of Swabi, KP · GPA 3.34/4.0 · (2022 - 2026)",
     },
   ],
 
